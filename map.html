@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Leaflet Map</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7/leaflet.css" />
+    <script src="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7/leaflet.js"></script>
+</head>
+<body>
+    <div id="Map" style="width: 1000px; height: 800px"></div>
+    <script>
+        //id/nombre/latitud/longitud
+        var convirtiendo = ""
+        convirtiendo = "001,giovanni sanchez,32.61109528,-115.3879714"+
+            "|002,juanito perez,32.59642168,-115.3649693"+
+            "|003,pedro,32.61733211,-115.3969537"+
+            "|004,victor,-32.61734505,-115.396485"+
+            "|005,hernan cortez,-32.85233211,-115.1469537|".slice(0, -1);
+
+        var arrayDatosWindev = convirtiendo.split('|');
+        var extrayendoPosiciones = [];
+        for (var i = 0; i < arrayDatosWindev.length; i++) {
+            extrayendoPosiciones = arrayDatosWindev[i].split(',');
+            arrayDatosWindev[i] = extrayendoPosiciones
+        }
+
+        let map = L.map('Map', {
+            center: [32.61447824639567, -115.44090270996095],
+            zoom: 13,
+        });
+        L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: "FruteriasNenas",
+        maxZoom: 18
+        }).addTo(map);
+
+		for (var i = 0; i < arrayDatosWindev.length; i++) {
+			marker = new L.marker([arrayDatosWindev[i][2],arrayDatosWindev[i][3]])
+				.bindPopup(`${arrayDatosWindev[i][1]}`)
+                .on('mouseover',function(ev) {this.openPopup();})
+                .on('click', seleccionPosicionUsuario.bind(null, arrayDatosWindev[i][0]))
+				.addTo(map);
+		}
+
+        function seleccionPosicionUsuario(IDEmpleado, e) {
+            alert("ID EMPLEADO "+IDEmpleado+"latitud" + e.latlng.lat + "longitud "+e.latlng.lng);
+        }
+    </script>
+</body>
+</html>
